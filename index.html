@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>あなたのごきげんセルフケア診断｜全27タイプ</title>
+  <style>
+    body {
+      background-color: #FFFDE7; /* パステルイエロー */
+      font-family: "Rounded Mplus 1c", "Hiragino Maru Gothic ProN", "YuGothic", sans-serif;
+      padding: 20px;
+      line-height: 1.8;
+    }
+    h1 {
+      font-size: 1.8em;
+      color: #444;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .yes {
+      background-color: #FFCC80; /* オレンジ系 */
+    }
+    .no {
+      background-color: #AED581; /* 黄緑系 */
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 0.8em;
+      color: #666;
+      text-align: center;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+  <h1>あなたのごきげんセルフケア診断｜全27タイプ</h1>
+  <p><strong>「なんだか疲れがとれないな…」そんなあなたに。</strong><br>
+  自分にぴったりのセルフケアが見つかる48問の診断です。</p>
+
+  <div id="quiz"></div>
+
+  <footer>
+    <p>セルフケアコーチまき</p>
+    <p>&copy; 2025 Maki / All rights reserved.<br>
+    本サイトは CC BY-NC-ND 4.0 ライセンスで提供されています。<br>
+    無断転載・商用利用・改変を禁じます。</p>
+  </footer>
+
+  <script>
+    const questions = [
+      "自分にも他人にも、正しさやルールを大事にしたいと思う。",
+      "やるべきことを後回しにすると、罪悪感を感じることがある。",
+      "小さなことでも「正しくありたい」と感じる。",
+      "人に対して「こうあるべき」を心の中で思うことがある。",
+      "人の役に立てたとき、自分の存在価値を感じる。",
+      "頼られると断れず、つい頑張ってしまう。",
+      "相手が何を求めているか、自然と気づくことが多い。",
+      "「ありがとう」が自分へのごほうびだと思う。",
+      "成果を出すことで、自分の価値を証明したいと思う。",
+      "効率よく行動することに満足感を感じる。",
+      "「すごいね」と言われると嬉しくなる。",
+      "目標がないと不安になったり落ち着かないことがある。",
+      "自分はちょっと人と違うと感じることが多い。",
+      "感情の波があることを、自分の一部として受け入れている。",
+      "音楽やアートに深く共感するタイプだと思う。",
+      "「本当の自分をわかってほしい」と感じることがある。",
+      "ひとりで考える時間がなにより大切だ。",
+      "人に頼らず、まず自分で調べたり理解しようとする。",
+      "知識があればあるほど安心できる。",
+      "頭の中で整理してからでないと、話しづらいと感じることがある。",
+      "もしもの時のために、準備や確認をしておきたい。",
+      "信頼できる人や制度に安心感を感じる。",
+      "不安を感じやすく、それに備えた行動をとることが多い。",
+      "誰かと一緒に行動することで安心することがある。",
+      "楽しい予定があるだけで、前向きになれる。",
+      "つらいことがあっても、気分転換して前を向くタイプだ。",
+      "好奇心が強く、気になることはすぐ試したくなる。",
+      "選択肢が多いとワクワクする反面、迷ってしまうこともある。",
+      "自分の意見はハッキリ伝えたいと思う。",
+      "弱く見られることに抵抗がある。",
+      "大切な人や仲間は守りたいという意識が強い。",
+      "感情を表に出すことにためらいは少ない。",
+      "争いごとはできるだけ避けたいと思う。",
+      "人に合わせすぎて、自分の意見がわからなくなることがある。",
+      "ぼーっとする時間や、何もしない時間が好き。",
+      "決断を先延ばしにしてしまうことがある。",
+      "イメージで物ごとを理解することが多い。",
+      "メモや図で説明されるとわかりやすい。",
+      "頭の中で映像を思い浮かべながら考えることがある。",
+      "空間の美しさや整理整頓された環境に落ち着きを感じる。",
+      "説明を聞くことで理解が深まるタイプだ。",
+      "誰かに話すことで、自分の考えが整理される。",
+      "言葉のリズムや音の響きに敏感だと思う。",
+      "静かな場所や好きな音で集中できる。",
+      "体を動かすことで頭の中もスッキリする。",
+      "手を動かして書いたり触れたりすることで覚えやすい。",
+      "心地よい香りや肌ざわりでリラックスできる。",
+      "気持ちを表現するのが言葉より動きや感覚のときがある。"
+    ];
+
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    const quizDiv = document.getElementById("quiz");
+
+    shuffled.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<p>${index + 1}. ${q}</p>
+        <button class="button yes">YES</button>
+        <button class="button no">NO</button>`;
+      quizDiv.appendChild(div);
+    });
+  </script>
+</body>
+</html>
